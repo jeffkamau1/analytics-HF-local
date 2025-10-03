@@ -16,13 +16,24 @@ export interface DataRow {
 
 export function loadCSV(path: string): Promise<DataRow[]> {
   return new Promise((resolve, reject) => {
-    Papa.parse<DataRow>(path, {
+    Papa.parse(path, {
       download: true,
       header: true,
-      worker:true,
+      dynamicTyping: false, // keep all as strings
       skipEmptyLines: true,
-      complete: (result) => resolve(result.data),
-      error: (err) => reject(err),
+      complete: (result) => {
+        if (result.errors.length > 0) {
+          console.error("PapaParse errors:", result.errors);
+          reject(result.errors);
+        } else {
+          console.log("CSV parsed successfully:", result.data.length, "rows");
+          resolve(result.data as DataRow[]);
+        }
+      },
+      error: (err) => {
+        console.error("PapaParse failed:", err);
+        reject(err);
+      },
     });
   });
 }
