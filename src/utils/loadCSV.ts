@@ -19,6 +19,7 @@ export function loadCSV(path: string): Promise<DataRow[]> {
     Papa.parse<DataRow>(path, {
       download: true,
       header: true,
+      worker:true,
       skipEmptyLines: true,
       complete: (result) => resolve(result.data),
       error: (err) => reject(err),
