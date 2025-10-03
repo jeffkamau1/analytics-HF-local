@@ -11,8 +11,8 @@ export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([]);
 
   useEffect(() => {
-    loadCSV("/Comprehensive_Banking_Database.csv").then(setData);
-  }, []);
+  loadCSV("/Comprehensive_Banking_Database.csv").then(setData);
+}, []);
 
   if (!data.length) return <p className="p-4">Loading data...</p>;
 
