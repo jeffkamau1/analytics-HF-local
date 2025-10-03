@@ -9,15 +9,21 @@ import { Card } from "flowbite-react";
 
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-  loadCSV("/Comprehensive_Banking_Database.csv")
-    .then(setData)
-    .catch((err) => {
-      console.error("CSV load error:", err);
-    });
-}, []);
-
+    console.log("Fetching CSV...");
+    loadCSV("/Comprehensive_Banking_Database.csv")
+      .then((rows) => {
+        console.log("CSV loaded, rows:", rows.length);
+        setData(rows);
+      })
+      .catch((err) => {
+        console.error("CSV load error:", err);
+        setError("Failed to load data");
+      });
+  }, []);
+  if (error) return <p className="p-4 text-red-600">{error}</p>;
   if (!data.length) return <p className="p-4">Loading data...</p>;
 
   return (
